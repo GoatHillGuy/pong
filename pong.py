@@ -47,10 +47,12 @@ pygame.display.set_caption('Pong')
 # Update the display using flip
 pygame.display.flip()
 
-font = pygame.font.Font('freesansbold.ttf', 50)
-blip = pygame.mixer.Sound('sounds/blip.wav')
-score = pygame.mixer.Sound('sounds/score.wav')
-victory = pygame.mixer.Sound('sounds/victory.wav')
+fontMedium = pygame.font.Font('freesansbold.ttf', 50)
+fontSmall = pygame.font.Font('freesansbold.ttf', 30)
+blip = pygame.mixer.Sound('./sounds/blip.wav')
+score = pygame.mixer.Sound('./sounds/score.wav')
+victory = pygame.mixer.Sound('./sounds/victory.wav')
+logo = pygame.image.load('./sprites/logo.png')
 
 
 class Paddle1:
@@ -97,10 +99,11 @@ class Pause:
         self.y = y
 
     def pause(self):
-        textp = font.render("Paused", True, (0, 0, 0))
+        textp = fontMedium.render("Paused", True, (0, 0, 0))
         textRectp = textp.get_rect()
         textRectp.center = (self.x, self.y)
-        print(screen.blit(textp, textRectp))
+        screen.blit(logo, (600, 250))
+        screen.blit(textp, textRectp)
 
 
 # Variable to keep our game loop running
@@ -112,7 +115,7 @@ while running:
 
     for event in pygame.event.get():
         keys = pygame.key.get_pressed()
-        pause = Pause(500, 500)
+        pause = Pause(600, 350)
         if keys[pygame.K_s]:
             p1y += pspeed
         if keys[pygame.K_w]:
@@ -137,21 +140,29 @@ while running:
     pygame.draw.rect(screen, paddle2_colour, pa2.paddle())
     pygame.draw.rect(screen, ball_colour, ball.ball())
 
-    text1 = font.render(str(score1), True, (255, 154, 246))
+    text1 = fontMedium.render(str(score1), True, (255, 154, 246))
     textRect1 = text1.get_rect()
     textRect1.center = (400, 50)
 
-    text2 = font.render(str(score2), True, (255, 255, 253))
+    text2 = fontMedium.render(str(score2), True, (255, 255, 253))
     textRect2 = text2.get_rect()
     textRect2.center = (800, 50)
 
-    textv1 = font.render("Player 1 has won. Woohoo.", True, (0, 0, 0))
+    textv1 = fontMedium.render("Player 1 has won. Woohoo.", True, (0, 0, 0))
     textRectv1 = textv1.get_rect()
-    textRectv1.center = (800, 50)
+    textRectv1.center = (600, 350)
 
-    textv2 = font.render("Player 2 has won. Yippee", True, (0, 0, 0))
+    textv2 = fontMedium.render("Player 2 has won. Yippee", True, (0, 0, 0))
     textRectv2 = textv2.get_rect()
-    textRectv2.center = (800, 50)
+    textRectv2.center = (600, 350)
+
+    textr = fontSmall.render("Press X to replay", True, (0, 0, 0))
+    textRectr = textv2.get_rect()
+    textRectr.center = (600, 450)
+
+    textq = fontSmall.render("Press ESC to quit", True, (0, 0, 0))
+    textRectq = textv2.get_rect()
+    textRectq.center = (950, 450)
 
     screen.blit(text1, textRect1)
     screen.blit(text2, textRect2)
@@ -228,14 +239,34 @@ while running:
         BAYM = 0
         pspeed = 0
         screen.blit(textv1, textRectv1)
-        pygame.mixer.Sound.play(victory)
+        screen.blit(textr, textRectr)
+        screen.blit(textq, textRectq)
+        # pygame.mixer.Sound.play(victory)
+        if keys[pygame.K_x]:
+            score1 = 0
+            score2 = 0
+            BAXM = 1
+            BAYM = 1
+            pspeed = 20
+        if keys[pygame.K_ESCAPE]:
+            running = False
 
     if score2 == 10:
         BAXM = 0
         BAYM = 0
         pspeed = 0
         screen.blit(textv2, textRectv2)
-        pygame.mixer.Sound.play(victory)
+        screen.blit(textr, textRectr)
+        screen.blit(textq, textRectq)
+        # pygame.mixer.Sound.play(victory)
+        if keys[pygame.K_x]:
+            score1 = 0
+            score2 = 0
+            BAXM = 1
+            BAYM = 1
+            pspeed = 0
+        if keys[pygame.K_ESCAPE]:
+            running = False
 
     if p1y >= SC_HEIGHT - p1h:
         p1y = SC_HEIGHT - p1h
