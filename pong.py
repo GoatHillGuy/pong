@@ -212,6 +212,14 @@ while running:
     pygame.draw.rect(screen, paddle2_colour, pa2.paddle())
     pygame.draw.rect(screen, ball_colour, ball.ball())
 
+    text1 = fontMedium.render(str(score1), True, (255, 154, 246))
+    textRect1 = text1.get_rect()
+    textRect1.center = (400, 50)
+
+    text2 = fontMedium.render(str(score2), True, (255, 255, 253))
+    textRect2 = text2.get_rect()
+    textRect2.center = (800, 50)
+
     screen.blit(text1, textRect1)
     screen.blit(text2, textRect2)
 
